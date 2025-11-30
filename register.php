@@ -4,15 +4,25 @@ require "config.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
     $password = trim($_POST['password']);
 
-    // Hash password
+    // Basic email validation
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "❌ Invalid email format!";
+        exit;
+    }
+
+    // Hash password securely
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
+    // Default status for new users
+    $status = "1";
+
     // Insert into users table
-    $sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+    $sql = "INSERT INTO users (name, email, password, status) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $password_hashed);
+    $stmt->bind_param("ssss", $username, $email, $password_hashed, $status);
 
     if ($stmt->execute()) {
         echo "🎉 Registration successful! You can now <a href='login.php'>login</a>";
@@ -24,8 +34,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <form method="POST">
     <h2>Register New User</h2>
+
     <label>Username:</label><br>
     <input type="text" name="username" required><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" required><br><br>
 
     <label>Password:</label><br>
     <input type="password" name="password" required><br><br>
