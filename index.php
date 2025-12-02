@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $user_id;
                 $_SESSION['username'] = $user['name'];
 
-                header("Location: dashboard.php");
+                header("Location: AdminHome.php");
                 exit;
             } else {
                 // Record failed attempt (1st or 2nd)
