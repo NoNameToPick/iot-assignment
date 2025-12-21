@@ -564,7 +564,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['api']) && $_GET['api'] 
                 <li><a href="#" class="nav-link" data-section="users">User Management</a></li>
                 <li><a href="#" class="nav-link" data-section="devices">Device Management</a></li>
                 <li><a href="#" class="nav-link" data-section="logs">Activity Logs</a></li>
-                <li><a href="#" class="nav-link" data-section="notifications">Notifications</a></li>
                 <li><a href="#" onclick="logout()">Logout</a></li>
             </ul>
         </div>
@@ -1229,52 +1228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['api']) && $_GET['api'] 
             };
         }
 
-        // Notification management functions
-        function dismissNotification(button) {
-            const row = button.closest('tr');
-            row.style.opacity = '0.5';
-            row.style.textDecoration = 'line-through';
-            setTimeout(() => {
-                row.remove();
-                updateUnreadCount();
-            }, 300);
-        }
 
-        function markAllAsRead() {
-            const rows = document.querySelectorAll('#notifications-tbody tr');
-            rows.forEach(row => {
-                const dot = row.querySelector('span[style*="border-radius"]');
-                if (dot) {
-                    dot.style.backgroundColor = '#cbd5e1'; // gray when read
-                }
-            });
-            updateUnreadCount();
-            alert('All notifications marked as read');
-        }
-
-        function clearAllNotifications() {
-            if (confirm('Are you sure you want to clear all notifications?')) {
-                const tbody = document.getElementById('notifications-tbody');
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#9ca3af;">No notifications</td></tr>';
-                updateUnreadCount();
-                alert('All notifications cleared');
-            }
-        }
-
-        function updateUnreadCount() {
-            const rows = document.querySelectorAll('#notifications-tbody tr');
-            let unreadCount = 0;
-            rows.forEach(row => {
-                const dot = row.querySelector('span[style*="border-radius"]');
-                if (dot && (dot.style.backgroundColor === '#4ade80' || dot.style.backgroundColor === '#fbbf24')) {
-                    unreadCount++;
-                }
-            });
-            const countEl = document.getElementById('unread-count');
-            if (countEl) {
-                countEl.textContent = unreadCount + ' Unread';
-            }
-        }
 
         // Initial wiring
         document.addEventListener('DOMContentLoaded', function(){
